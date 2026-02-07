@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('authors', function (Blueprint $table) {
+        Schema::create('members', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('bio')->nullable();
-            $table->string('nationality')->nullable();
+            $table->string('email')->unique();
+            $table->text('address');
+            $table->date('membership_date')->default(now());
+            $table->string('whatsApp_number')->nullable();
+            $table->enum('status',['active','unactive'])->default('active');
 
             $table->timestamps();
         });
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('authors');
+        Schema::dropIfExists('members');
     }
 };
