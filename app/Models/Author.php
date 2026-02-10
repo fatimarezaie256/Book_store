@@ -9,7 +9,11 @@ class author extends Model
 {
     /** @use HasFactory<\Database\Factories\AuthorFactory> */
     use HasFactory;
-    
+    protected $fillable = [
+        "name",
+        "bio",
+        "nationality"
+    ];
     public function book(){
         return $this->hasMany(Book::class,'author_id');
     }
