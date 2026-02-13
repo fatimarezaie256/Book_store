@@ -21,7 +21,6 @@ return new class extends Migration
             $table->integer('available_copies')->default(1);
             $table->string('cover_image')->default('./public/images/1.png');
             $table->enum('status',['available','unavailable'])->default('available');
-            $table->decimal('price',4,2);
             $table->foreignId('author_id')->constrained('authors');
             $table->string('genre');
             $table->timestamps();
