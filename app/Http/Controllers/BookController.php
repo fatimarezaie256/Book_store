@@ -15,7 +15,7 @@ class BookController extends Controller
         //
       $book = Book::all();
       return response()->json([
-        "book"=>$book,
+        "All books"=>$book,
       ]);
 
 
@@ -51,6 +51,7 @@ class BookController extends Controller
     public function show(string $id)
     {
         //
+        
     }
 
     /**
@@ -59,6 +60,22 @@ class BookController extends Controller
     public function update(Request $request, string $id)
     {
         //
+       $book = Book::findorfail($id);
+       $book->update([
+        "title"=>$request->title,
+        "isbn"=>$request->isbn,
+        "description"=>$request->description,
+        "published_at"=>$request->published_at,
+        "total_copies"=>$request->total_copies,
+        "available_copies"=>$request->available_copies,
+        "cover_image"=>$request->image,
+        "status"=>$request->status,
+        "price"=>$request->author_id,
+        "genre"=>$request->genre,
+       ]);
+       return response()->json([
+        "updatedBooks"=>$book,
+       ]);
     }
 
     /**
@@ -67,5 +84,10 @@ class BookController extends Controller
     public function destroy(string $id)
     {
         //
+            $book = Book::findOrFail($id);
+       $book->delete();
+       return response()->json([
+        "messege"=>"the considered book deleted successfully!"
+       ]);
     }
 }

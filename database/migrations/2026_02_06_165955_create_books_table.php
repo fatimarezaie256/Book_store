@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('published_at');
             $table->integer('total_copies')->default(1);
             $table->integer('available_copies')->default(1);
-            $table->string('cover_image')->default('./public/images/1.png');
+            $table->string('cover_image')->default('../public/images/1.png');
             $table->enum('status',['available','unavailable'])->default('available');
             $table->foreignId('author_id')->constrained('authors');
             $table->string('genre');
