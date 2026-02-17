@@ -15,7 +15,7 @@ class BookController extends Controller
         //
       $book = Book::all();
       return response()->json([
-        "All books"=>$book,
+        "book"=>$book,
       ]);
 
 
@@ -51,7 +51,6 @@ class BookController extends Controller
     public function show(string $id)
     {
         //
-        
     }
 
     /**
