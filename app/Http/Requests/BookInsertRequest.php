@@ -31,7 +31,7 @@ class BookInsertRequest extends FormRequest
             "cover_image"=>"nullable|string",
             "status"=>"required",
             "price"=>"nullable|number",
-            "author_id"=>"required|number",
+            "author_id"=>"required|integer",
             "genre"=>"required",
         ];
     }
