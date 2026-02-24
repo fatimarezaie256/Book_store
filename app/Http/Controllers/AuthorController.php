@@ -5,18 +5,29 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Author;
 use App\Http\Requests\AuthorInsertRequest;
+use App\Http\Resources\authorResource;
+
 class AuthorController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $author = Author::all();
-        return response()->json([
-            "author"=>$author
-        ]);    
+         $query = Author::with('book');
+                if($request->has('search')){
+                    $search = $request->search;
+                    $query->where(function($q) use ($search){
+                    $q->where('name','LIKE',"%{$search}%");
+                    });
+                }
+                  $member = $query->paginate(10);
+             return authorResource::collection($member);
+        // $author = Author::with('book')->all();
+        // return response()->json([
+        //     "author"=>$author
+        // ]);    
     }
 
     /**

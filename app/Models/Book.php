@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\BorrowingController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use app\Http\Modls\Author;
 use app\Http\Modls\Borrowing;
-class book extends Model
+use App\Models\borrowing as ModelsBorrowing;
+
+class Book extends Model
 {
     /** @use HasFactory<\Database\Factories\BookFactory> */
     use HasFactory;
@@ -24,10 +28,10 @@ class book extends Model
         "author_id",
     ];
     public function author(){
-       return $this->belongsTo(Author::class,'author_id');
+       return $this->belongsTo(AuthorController::class,'author_id');
     }
     public function borrowing(){
-        return $this->hasMany(Borrowing::class);
+        return $this->hasMany(BorrowingController::class);
     }
     public function isAvailable(){
         return $this->available_copies>0;

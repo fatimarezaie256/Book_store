@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Book;
 use App\Models\Member;
+use Carbon\Carbon;
+
 class borrowing extends Model
 {
     /** @use HasFactory<\Database\Factories\BorrowingFactory> */

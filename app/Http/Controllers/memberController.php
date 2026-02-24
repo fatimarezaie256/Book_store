@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\memberRecourse;
 use App\Models\member;
+use Exception;
 use Illuminate\Http\Request;
 
 class memberController extends Controller
@@ -10,21 +12,30 @@ class memberController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-      $member = member::all();
-     return response()->json([
-        "All members"=>$member,
-      ]);
-    }
+         $query = member::with('borrowing');
+                if($request->has('search')){
+                    $search = $request->search;
+                    $query->where(function($q) use ($search){
+                    $q->where('name','LIKE',"%{$search}%");
+                    });
+                      $member = $query->paginate(10);
+                }
 
-    /**
+        $member = $query->paginate(10);
+             return memberRecourse::collection($member);
+    }
+                
+                
+                /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
         //
+        try{
        $member = member::create([
        "name"=>$request->name,   
        "email"=>$request->email,   
@@ -35,7 +46,11 @@ class memberController extends Controller
        ]);
        return response()->json([
         "InsertedMember"=>$member,
-       ]);
+       ]);}catch(Exception $error){
+        return response()->json([
+          "error"=>"sorry something went wrong.please try again!"
+        ]);
+       }
     }
 
     /**
@@ -44,10 +59,15 @@ class memberController extends Controller
     public function show(string $id)
     {
         //
+        try{
        $member = member::findOrFail($id);
        return response()->json([
         "Single Memeber"=>$member,
-       ]);
+       ]);}catch(Exception $error){
+        return response()->json([
+            "error"=>"the id " . $id . " was not found.please try again!"
+        ]);
+       }
     }
 
     /**
@@ -56,6 +76,7 @@ class memberController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        try{
         $member = member::findOrFail($id);
         $member->update([
         "name"=>$request->name,
@@ -67,7 +88,14 @@ class memberController extends Controller
        ]);
        return response()->json([
         "Updated Member"=>$member,
-       ]);
+       ]);}
+       catch(Exception $error){
+           return response()->json([
+            "error"=> "the id " . $id ."  was not found.please try again!"
+,           ],
+           403
+);
+       }
 
     }
 
@@ -77,10 +105,15 @@ class memberController extends Controller
     public function destroy(string $id)
     {
         //
+        try{
      $member = member::findOrFail($id);
      $member->delete();
      return response()->json([
         "messege"=>$member->name. " deleted successfully from list of members",
-     ]);
+     ]);}catch(Exception $error){
+        return response()->json([
+            "error"=>"the selected id was not found.please try again!"
+        ]);
+     }
     }
 }
