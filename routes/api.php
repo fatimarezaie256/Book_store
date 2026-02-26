@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\controllers\AuthorController;
 use App\Http\controllers\BookController;
+use App\Http\Controllers\BorrowingController;
 use App\Http\Controllers\memberController;
 
 Route::get('/user', function (Request $request) {
@@ -13,3 +14,4 @@ Route::get('/user', function (Request $request) {
 Route::apiResource('author',AuthorController::class);
 Route::apiResource('book',BookController::class);
 Route::apiResource('member',memberController::class);
+Route::apiResource('borrowing',BorrowingController::class);

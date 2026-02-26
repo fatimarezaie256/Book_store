@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BorrowingRequest;
+use App\Http\Resources\BorrowingResource;
 use App\Models\borrowing;
 use App\Models\member;
 use Illuminate\Http\Request;
@@ -14,22 +16,21 @@ class BorrowingController extends Controller
     public function index()
     {
         //
-       $borrow = borrowing::all();
-       return response()->json([
-        "All borrowings"=>$borrow,
-       ]);
+      $borrowings = borrowing::with('book','member');
+      $borrowings->paginate(10);
+      return BorrowingResource::collection($borrowings);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BorrowingRequest $request)
     {
         //
-        borrowing::create([
-            "book_id"=>$request->book_id,
+        $borrow = borrowing::create($request->validated());
+        return response()->json([
+            "data"=>$borrow,
         ]);
-    
     }
 
     /**
