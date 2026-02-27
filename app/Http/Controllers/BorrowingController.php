@@ -24,12 +24,18 @@ class BorrowingController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(BorrowingRequest $request)
+    public function store(Request $request)
     {
         //
-        $borrow = borrowing::create($request->validated());
+       $borrow = borrowing::create([
+            "book_id"=>$request->book_id,
+            "member_id"=>$request->member_id,
+            "borrowed_date"=>$request->borrowed_date,
+            "due_date"=>$request->due_date,
+            "status"=>$request->status,
+        ]);
         return response()->json([
-            "data"=>$borrow,
+            "Inserted Borrowing Book"=> $borrow,
         ]);
     }
 
