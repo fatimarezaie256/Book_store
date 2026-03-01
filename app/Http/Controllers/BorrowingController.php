@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BorrowingRequest;
+use App\Http\Resources\bookResource;
 use App\Http\Resources\BorrowingResource;
 use App\Models\borrowing;
 use App\Models\member;
@@ -16,9 +17,9 @@ class BorrowingController extends Controller
     public function index()
     {
         //
-      $borrowings = borrowing::with('book','member');
-      $borrowings->paginate(10);
-      return BorrowingResource::collection($borrowings);
+          $borrowings = Borrowing::with('book','member')->paginate(10);
+
+    return BorrowingResource::collection($borrowings);
     }
 
     /**
@@ -42,10 +43,11 @@ class BorrowingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(borrowing $borrow)
     {
         //
-       $borrow = borrowing::findOrFail($id);
+       $borrow->load(['book','member']);
+       return new bookResource($borrow);
        
     }
 

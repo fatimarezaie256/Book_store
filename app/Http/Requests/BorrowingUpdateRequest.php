@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class memberInsert extends FormRequest
+class BorrowingUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,11 @@ class memberInsert extends FormRequest
     {
         return [
             //
-            
+            "borrowed_date"=>"nullable|date",
+            "book_id"=>"nullable|integer",
+            "member_id"=>"nullable|integer",
+            "returned_date"=>"required|date",
+            "status"=>"required|string",
         ];
     }
 }
