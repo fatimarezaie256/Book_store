@@ -14,4 +14,5 @@ Route::get('/user', function (Request $request) {
 Route::apiResource('author',AuthorController::class);
 Route::apiResource('book',BookController::class);
 Route::apiResource('member',memberController::class);
-Route::apiResource('borrowing',BorrowingController::class);
+Route::apiResource('borrowing',BorrowingController::class)->only('index','store','show');
+Route::post('borrow/{borrow_id}/return',[BorrowingController::class],'');
