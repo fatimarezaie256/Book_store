@@ -11,6 +11,8 @@ use App\Models\member;
 use Exception;
 use Illuminate\Http\Request;
 
+use function Symfony\Component\Clock\now;
+
 class BorrowingController extends Controller
 {
     /**
@@ -54,42 +56,32 @@ class BorrowingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(BorrowingUpdateRequest $request, string $id)
-    {
-        //
-        try{
-           $borrowing = borrowing::findOrfail($id);
-           $borrowing->update($request->validated());
-           return new BorrowingResource($borrowing);
+    public function returnBook(borrowing $borrow){
+        if($borrow->status !=='borrowed'){
+            return response()->json([
+                ['messege'=>'the book has already been taken'],
+            ]);
+            $borrow->update([
+                "returned_date"=>now(),
+                "status"=>"returned"
+            ]);
+            $borrow->book->returnBook();
+            $borrow->load('book','member');
+            return new BorrowingResource($borrow);
 
         }
-        catch(Exception $err){
-          return response()->json([
-            "messege"=>$err->getMessage(),
-          ]);
-        } 
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
-        $member = borrowing::findOrFail($id);
-        $member->load(['book','activeBorrowing']);
-        if($member->activeBorrowing()->count()>0){
-             return response()->json(
-                ["messege"=>"You can not delete". $member->name. "because he/she have borrowed some books".$member->activeBorrowing()->count() . "books"],
-             );
-
-        }
-        else{
-            $member->delete();
-            return response()->json([
-                "meesege"=>"member has been deleted successfully",
+     public function overdue(){
+            $overdueBorrowings = borrowing::with(['book','member'])->
+            where('status','borrowed')->
+            where('due_date','<',now())->update([
+                'status'=>'over_due'
             ]);
-        }
-          
-    }
+            return BorrowingResource::collection($overdueBorrowings);
+
+     }
 }
