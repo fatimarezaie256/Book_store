@@ -53,9 +53,6 @@ class BorrowingController extends Controller
        
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function returnBook(borrowing $borrow){
         if($borrow->status !=='borrowed'){
             return response()->json([
@@ -72,9 +69,7 @@ class BorrowingController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    
      public function overdue(){
             $overdueBorrowings = borrowing::with(['book','member'])->
             where('status','borrowed')->
