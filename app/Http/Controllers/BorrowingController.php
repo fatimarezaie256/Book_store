@@ -53,18 +53,18 @@ class BorrowingController extends Controller
        
     }
 
-    public function returnBook(borrowing $borrow){
-        if($borrow->status !=='borrowed'){
+    public function returnBook(borrowing $borrowing){
+        if($borrowing->status !=='borrowed'){
             return response()->json([
                 ['messege'=>'the book has already been taken'],
             ]);
-            $borrow->update([
+            $borrowing->update([
                 "returned_date"=>now(),
                 "status"=>"returned"
             ]);
-            $borrow->book->returnBook();
-            $borrow->load('book','member');
-            return new BorrowingResource($borrow);
+            $borrowing->book->returnBook();
+            $borrowing->load('book','member');
+            return new BorrowingResource($borrowing);
 
         }
     }
