@@ -12,8 +12,8 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
  
-Route::apiResource('author',AuthorController::class);
-Route::apiResource('book',BookController::class);
+
+
 Route::apiResource('member',memberController::class);
 
 Route::apiResource('borrowing',BorrowingController::class)->only('index','store','show');
@@ -21,7 +21,13 @@ Route::apiResource('borrowing',BorrowingController::class)->only('index','store'
 Route::post('borrow/{borrowing}/return',[BorrowingController::class,'returnBook']);
 
 Route::get("borrow/overdue",[BorrowingController::class,'overdue']);
-
+// registerd route
 Route::post('register',[AuthController::class,'register']);
-
-Route::post('login',[AuthController::class,'Login']);
+// login route
+Route::post('login',[AuthController::class,'login']);
+// middleware
+Route::middleware('auth:sanctum')->group(function (){
+  Route::apiResource('author',AuthorController::class);
+  Route::apiResource('book',BookController::class);
+  Route::post('logout',[AuthController::class,'logout']);
+});
