@@ -49,7 +49,7 @@ class AuthController extends Controller
                 "messege"=>"email or password is incorrect!"
             ]);
          }
-        $token = $user->createToken("auth_token")->plainText;
+        $token = $user->createToken("auth_token",['read-book','read-author','insert-book','update-book','delete-book'])->plainText;
         return response()->json([
             "success"=>"true",
             "user"=>new UserResource($user),
@@ -60,12 +60,28 @@ class AuthController extends Controller
       
     
     public function logout(Request $request){
-           $request->user()->currentAccessToken()->delete();
-           return response()->json([
-            "messege"=>"You are logged out!"
-           ]);
-    }
+        // try{
+        if($request->user() && $request->user()->currentAccessToken()){
+          $request->user()->currentAccessToken()->delete();
+          response()->json([
+            "messegge"=>"You are logged out!"
+          ]);
+        }
+        return response()->json([
+            "messege"=>"user has already been logout!"
+        ]);
+        // }
+        // catch($){
+        //     return response()->json([
+        //         "messege"=>"something went wrong"
+        //     ]);
+        // }
+    //        $request->user()->currentAccessToken()->delete();
+    //        return response()->json([
+    //         "messege"=>"You are logged out!"
+    //        ]);
+    // }
 
     }
+    }
     
-  

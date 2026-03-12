@@ -31,3 +31,6 @@ Route::middleware('auth:sanctum')->group(function (){
   Route::apiResource('book',BookController::class);
   Route::post('logout',[AuthController::class,'logout']);
 });
+Route::prefix()->group(function (){
+  
+});

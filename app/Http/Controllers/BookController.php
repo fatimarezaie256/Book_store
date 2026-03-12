@@ -13,6 +13,9 @@ class BookController extends Controller
     public function index(Request $request)
     {
         //
+        if(!$request->user()->tokenCan('read-book')){
+            abort('You are not allowed');
+        }
       $book = Book::all();
       $query = Book::with('author');
         if($request->has('search')){
@@ -38,6 +41,9 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
+        if(!$request->user()->tokenCan('insert-book')){
+        abort("303","you are not allowed");
+        }
         $book = Book::create([
     "title"=>$request->title,
     "isbn"=>$request->isbn,
@@ -71,6 +77,9 @@ class BookController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        if(!$request->user()->tokenCan('update-book')){
+        abort("303","you are not allowed");
+        }
        $book = Book::findorfail($id);
        $book->update([
         "title"=>$request->title,
@@ -92,9 +101,12 @@ class BookController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request ,string $id )
     {
         //
+        if(!$request->user()->tokenCan('delete-book')){
+        abort("303","you are not allowed");
+        }
             $book = Book::findOrFail($id);
        $book->delete();
        return response()->json([
