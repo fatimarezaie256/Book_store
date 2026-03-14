@@ -7,6 +7,7 @@ use App\Http\controllers\AuthorController;
 use App\Http\controllers\BookController;
 use App\Http\Controllers\BorrowingController;
 use App\Http\Controllers\memberController;
+use App\Http\Controllers\ProductController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -32,5 +33,6 @@ Route::middleware('auth:sanctum')->group(function (){
   Route::post('logout',[AuthController::class,'logout']);
 });
 Route::prefix()->group(function (){
-  
+   
 });
+Route::apiResource("product",ProductController::class);
